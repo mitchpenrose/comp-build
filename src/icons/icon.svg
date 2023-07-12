@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32">
+  <rect width="100%" height="100%" fill="black" />
+  <text x="30%" y="75%" text-anchor="middle" fill="red" font-size="20px" font-family="Arial, sans-serif">C</text>
+  <text x="70%" y="75%" text-anchor="middle" fill="blue" font-size="20px" font-family="Arial, sans-serif">B</text>
+</svg>
