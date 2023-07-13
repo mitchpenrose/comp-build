@@ -164,27 +164,6 @@ function App() {
 
   const patch = '13.11.1'
 
-  // useEffect(() => {
-  //   window.innerHeight
-  // }, [])
-
-  // useEffect(() => {
-  //   setWidth((rootRef.current as any).scrollWidth + 'px');
-  //   const handleResize = () => {
-  //     if (width === (rootRef.current as any).scrollWidth + 'px') {
-  //       setWidth('0px')
-  //     }
-  //     else {
-  //       setWidth((rootRef.current as any).scrollWidth + 'px')
-  //     }
-  //   }
-
-  //   window.addEventListener('resize', handleResize);
-  //   return () => {
-  //     window.removeEventListener('resize', handleResize);
-  //   }
-  // }, [rootRef.current, width])
-
   useEffect(() => {
     getWinrates().then((result) => {
       setChampionWinRates(result)
@@ -669,8 +648,20 @@ function App() {
 
   const setupInfoModal = (title: string) => {
     if (title === 'About') {
-      setInfoModalContent(`Composition Builder is designed to help League of Legends players find an optimal 
-      champion pick while in champion select.`)
+      setInfoModalContent(`Composition Builder is a dynamic tool created for League of Legends players to optimize team compositions, offering informed champion selections rooted in data from Platinum+ tier matches. It allows users to evaluate individual champions in different roles, comparing them against all other champions within their team or against opponents.
+
+      On the right or left side of the champion selection interface, users can find two tables: the Synergy table and the Matchup table. The Synergy table presents win rate data for the chosen champion in relation to their team members, with each row representing a different role: top, jungle, mid, ADC, and support. The 'Average Synergy' reflects the mean win rate based on all these combinations.
+      
+      Conversely, the Matchup table analyzes how the selected champion fares against each opponent in their corresponding role, and the 'Average Matchup' offers a comprehensive view of the performance across all opponents.
+      
+      Both these averages are then combined to form a 'Combined Results' value, providing an overview of the team's composition performance. However, it's important to remember that these statistics are not definitive indicators of match outcomes, but rather insightful references to comprehend historical champion synergy and matchups.
+      
+      For users who are unsure of champion role efficiency, the '?' button is a tool that displays champions with historically high synergy and matchup win rates. These are ordered from highest to lowest, offering a ranking system for decision making.
+      
+      Finally, users can clear a selected champion by clicking the button left or right of the champion dropdown. This allows for quick adjustments and recalculations, ensuring users can experiment with various team compositions with ease.
+      
+      Composition Builder aims to enhance strategizing and planning, encouraging data-driven decisions to elevate gameplay.
+      `)
     }
     if (title === 'Legal') {
       setInfoModalContent(`Composition Builder isn't endorsed by Riot Games and doesn't reflect the views 
