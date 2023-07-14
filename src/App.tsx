@@ -144,10 +144,10 @@ function App() {
   const [redCustomChamps, setRedCustomChamps] = useState<(string | null)[]>(Array(5).fill(null))
   const [blueCustomChamps, setBlueCustomChamps] = useState<(string | null)[]>(Array(5).fill(null))
   const [currentCustomChamp, setCurrentCustomChamp] = useState<{ redOrBlue: string, index: number }>({ redOrBlue: '', index: -1 })
-  const [redSynergyAverage, setRedSynergyAverage] = useState(0)
-  const [blueSynergyAverage, setBlueSynergyAverage] = useState(0)
-  const [redMatchupAverage, setRedMatchupAverage] = useState(0)
-  const [blueMatchupAverage, setBlueMatchupAverage] = useState(0)
+  const [redSynergyAverage, setRedSynergyAverage] = useState(NaN)
+  const [blueSynergyAverage, setBlueSynergyAverage] = useState(NaN)
+  const [redMatchupAverage, setRedMatchupAverage] = useState(NaN)
+  const [blueMatchupAverage, setBlueMatchupAverage] = useState(NaN)
   const [bestChampionMap, setBestChampionMap] = useState(new Map<string, any>())
   const [showConfusedModal, setShowConfusedModal] = useState(false)
   const [modalData, setModalData] = useState<any[]>([])
@@ -159,7 +159,7 @@ function App() {
   // const rootRef = useRef(null)
   const [showInfoModal, setShowInfoModal] = useState<boolean>(false)
   const [infoModalTitle, setInfoModalTitle] = useState<string>('')
-  const [infoModalContent, setInfoModalContent] = useState<string>('')
+  const [infoModalContent, setInfoModalContent] = useState<any>(<></>)
 
 
   const patch = '13.11.1'
@@ -648,20 +648,21 @@ function App() {
 
   const setupInfoModal = (title: string) => {
     if (title === 'About') {
-      setInfoModalContent(`Composition Builder is a dynamic tool created for League of Legends players to optimize team compositions, offering informed champion selections rooted in data from Platinum+ tier matches. It allows users to evaluate individual champions in different roles, comparing them against all other champions within their team or against opponents.
-
-      On the right or left side of the champion selection interface, users can find two tables: the Synergy table and the Matchup table. The Synergy table presents win rate data for the chosen champion in relation to their team members, with each row representing a different role: top, jungle, mid, ADC, and support. The 'Average Synergy' reflects the mean win rate based on all these combinations.
-      
-      Conversely, the Matchup table analyzes how the selected champion fares against each opponent in their corresponding role, and the 'Average Matchup' offers a comprehensive view of the performance across all opponents.
-      
-      Both these averages are then combined to form a 'Combined Results' value, providing an overview of the team's composition performance. However, it's important to remember that these statistics are not definitive indicators of match outcomes, but rather insightful references to comprehend historical champion synergy and matchups.
-      
-      For users who are unsure of champion role efficiency, the '?' button is a tool that displays champions with historically high synergy and matchup win rates. These are ordered from highest to lowest, offering a ranking system for decision making.
-      
-      Finally, users can clear a selected champion by clicking the button left or right of the champion dropdown. This allows for quick adjustments and recalculations, ensuring users can experiment with various team compositions with ease.
-      
-      Composition Builder aims to enhance strategizing and planning, encouraging data-driven decisions to elevate gameplay.
-      `)
+      setInfoModalContent(<div>
+        <div>Composition Builder is a dynamic tool created for League of Legends players to optimize team compositions, offering informed champion selections rooted in data from Platinum+ tier matches. It allows users to evaluate individual champions in different roles, comparing them against all other champions within their team or against opponents.</div>
+        <br />
+        <div>On the right or left side of the champion selection interface, users can find two tables: the Synergy table and the Matchup table. The Synergy table presents win rate data for the chosen champion in relation to their team members, with each row representing a different role: top, jungle, mid, ADC, and support. The 'Average Synergy' reflects the mean win rate based on all these combinations.</div>
+        <br />
+        <div>Conversely, the Matchup table analyzes how the selected champion fares against each opponent in their corresponding role, and the 'Average Matchup' offers a comprehensive view of the performance across all opponents.</div>
+        <br />
+        <div>Both these averages are then combined to form a 'Combined Results' value, providing an overview of the team's composition performance. However, it's important to remember that these statistics are not definitive indicators of match outcomes, but rather insightful references to comprehend historical champion synergy and matchups.</div>
+        <br />
+        <div>For users who are unsure of champion role efficiency, the '?' button is a tool that displays champions with historically high synergy and matchup win rates. These are ordered from highest to lowest, offering a ranking system for decision making.</div>
+        <br />
+        <div>Finally, users can clear a selected champion by clicking the button left or right of the champion dropdown. This allows for quick adjustments and recalculations, ensuring users can experiment with various team compositions with ease.</div>
+        <br />
+        <div>Composition Builder aims to enhance strategizing and planning, encouraging data-driven decisions to elevate gameplay.</div>
+      </div>)
     }
     if (title === 'Legal') {
       setInfoModalContent(`Composition Builder isn't endorsed by Riot Games and doesn't reflect the views 
@@ -691,7 +692,7 @@ function App() {
     <Context.Provider value={{ champData: championSelections, patch: patch, selectedChampions: pickedChamps, championToImage: championToImage } as Data}>
       <div id='yoyo'>
         <GlobalStyle />
-        <Modal isOpen={showInfoModal} onClose={() => { setShowInfoModal(false) }} title={infoModalTitle} height='fit-content'>
+        <Modal isOpen={showInfoModal} onClose={() => { setShowInfoModal(false) }} title={infoModalTitle} height={infoModalTitle === 'About' ? undefined : 'fit-content'}>
           <div>
             {infoModalContent}
           </div>
