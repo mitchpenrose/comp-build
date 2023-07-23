@@ -1,19 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import Context, { ChampionSelection } from '../Context/Context'
 import Select from 'react-select'
 import { getData } from '../Services/services'
 import { ReactComponent as Cancel } from '../icons/cancel.svg'
 
-const Circle = styled.div<{ $borderColor: string; }>`
+const Circle = styled.div<{ $borderColor: string; $loading: boolean}>`
     display: flex;
     justify-content: center;
     align-items: center;
     height: 150px;
     width: 150px;
     border-radius: 50%;
-    border: 2px solid ${props => props.$borderColor};
-    overflow: hidden;
+    border: 2px solid ${props => props.$loading ? 'transparent' : props.$borderColor};
     position: relative;
     margin-top: 10px;
     background-color: #3B444B;
@@ -22,6 +21,27 @@ const Circle = styled.div<{ $borderColor: string; }>`
         width: 120%;
         height: 120%;
         object-fit: cover;
+    }
+`
+
+const LoadingCircle = styled.div<{ $borderColor: string; }>`
+    position: absolute;
+    height: 150px;
+    width: 150px;
+    border: 2px solid transparent;
+    border-radius: 50%;
+    border-top: 2px solid ${props => props.$borderColor};
+    -webkit-animation: spin 0.1s linear infinite; /* Safari */
+    animation: spin 1s linear infinite;
+
+    @-webkit-keyframes spin {
+        0% { -webkit-transform: rotate(0deg); }
+        100% { -webkit-transform: rotate(360deg); }
+    }
+    
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
     }
 `
 
@@ -90,7 +110,7 @@ const StyledSelect = styled(Select) <{ $color: string, $selected: boolean }>`
     }
 `
 
-const CancelBox = styled.div<{$color: string}>`
+const CancelBox = styled.div<{ $color: string }>`
     border: 1px solid yellow;
     border-radius: 3px;
     position: relative;
@@ -106,6 +126,16 @@ const CancelIcon = styled(Cancel)`
     left: 1.45px;
 `
 
+const ImageContainer = styled.div`
+    width: 150px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 50%;
+`
+
 export type CallbackData = {
     championPosition: string,
     championName: string,
@@ -119,7 +149,7 @@ interface Props {
     bestChampionCallback: (color: string, position: string) => void
     setPickedChamp: (champ: string) => void
     selectedChampion?: string | null
-    clearSelectedChampion?: () => void  
+    clearSelectedChampion?: () => void
 }
 
 
@@ -128,6 +158,7 @@ const ChampionSelect = ({ color, position, dataCallback, bestChampionCallback, s
     const data = useContext(Context)
     const [championSelection, setChampionSelection] = useState<any>(null)
     const [availableChampions, setAvailableChampions] = useState<ChampionSelection[]>([])
+    const [loading, setLoading] = useState<boolean>(false)
 
     useEffect(() => {
         if (data.champData.length > 0) {
@@ -151,7 +182,7 @@ const ChampionSelect = ({ color, position, dataCallback, bestChampionCallback, s
     const clearChampion = () => {
         selectChampion(null)
         selectedChampion = undefined
-        if(clearSelectedChampion){
+        if (clearSelectedChampion) {
             clearSelectedChampion()
         }
     }
@@ -171,12 +202,14 @@ const ChampionSelect = ({ color, position, dataCallback, bestChampionCallback, s
     }
 
     const getMatchupData = async (championId: string, championName: string) => {
-        if(!championId){
-            dataCallback({championPosition: '', championName: '', matchupData: null})
+        if (!championId) {
+            dataCallback({ championPosition: '', championName: '', matchupData: null })
             return
         }
         const championPosition = position + "_" + championId
+        setLoading(true)
         const json = await getData(championPosition)
+        setLoading(false)
         dataCallback({ championPosition: championPosition, championName: championName, matchupData: json })
     }
 
@@ -189,9 +222,11 @@ const ChampionSelect = ({ color, position, dataCallback, bestChampionCallback, s
 
     return <Container>
         {color === 'red' && getDropdown('red')}
-        <Circle $borderColor={color}>
-            {championSelection !== null && <img src={data.championToImage.get(championSelection.value).src} />/*data.championToImage.get(championSelection)<img src={`http://ddragon.leagueoflegends.com/cdn/${data.patch}/img/champion/${championSelection}.png`} />*/}
+        <Circle $borderColor={color} $loading={loading}>
+            {championSelection !== null && <ImageContainer><img src={data.championToImage.get(championSelection.value).src} /></ImageContainer>}
+            {loading && <LoadingCircle $borderColor={color} />}
         </Circle>
+
         {color === 'blue' && getDropdown('blue')}
     </Container>
 }

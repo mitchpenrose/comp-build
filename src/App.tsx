@@ -348,7 +348,7 @@ function App() {
     }
     dataToSort.sort((a, b) => { return b.winPercent - a.winPercent })
     if (dataToSort.length === 0) {
-      console.log('default positions')
+      // console.log('default positions')
       setModalData(getDefaultSuggestions(position, currentChamp))
     }
     else {
@@ -662,6 +662,8 @@ function App() {
         <div>Finally, users can clear a selected champion by clicking the button left or right of the champion dropdown. This allows for quick adjustments and recalculations, ensuring users can experiment with various team compositions with ease.</div>
         <br />
         <div>Composition Builder aims to enhance strategizing and planning, encouraging data-driven decisions to elevate gameplay.</div>
+        <br />
+        <div>Tip: If the display appears too large, adjust the screen scaling by pressing 'Ctrl-' to decrease size or 'Ctrl+' to increase size, until it suits your viewing preferences.</div>
       </div>)
     }
     if (title === 'Legal') {
