@@ -166,23 +166,8 @@ function App() {
   const patch = '13.11.1'
 
   useEffect(() => {
-    GA4.gtag('config', 'G-BPQ188CVYS')
-
-    // Report initial page view
-    GA4.gtag('event', 'page_view', {
-      page_location: window.location.href,
-      page_path: window.location.pathname,
-      page_title: document.title
-    })
-
-    // Report page view on history change
-    window.onpopstate = () => {
-      GA4.gtag('event', 'page_view', {
-        page_location: window.location.href,
-        page_path: window.location.pathname,
-        page_title: document.title
-      })
-    }
+    GA4.initialize("G-BPQ188CVYS")
+    GA4.send({ hitType: "pageview" })
   }, [])
 
   useEffect(() => {
