@@ -4,7 +4,6 @@ import ChampionSelect, { CallbackData } from './Components/ChampionSelect'
 import styled, { createGlobalStyle } from 'styled-components'
 import { getChampion, getWinrates } from './Services/services'
 import Context, { ChampionSelection, Data } from './Context/Context'
-// import Modal from 'react-modal'
 import { ReactComponent as Logo } from './icons/logo.svg'
 import { JSX } from 'react/jsx-runtime'
 import Modal from './Components/Modal'
@@ -112,16 +111,11 @@ const Footer = styled.div`
   justify-content: center;
   align-items: center;
   min-width: 1718px;
-  // position: absolute;
-  // height: 80px;
-  // bottom: 0px;
 `
 
 const PatchInfo = styled.div`
   position: absolute;
-  margin-left: 100%;
-  margin-right: 10%;
-  width: max-content;
+  right: 50px;
 `
 
 const SubButton = styled.div`
