@@ -185,7 +185,7 @@ function App() {
     championSelections.forEach((champ) => {
       const img = new Image()
       //img.src = require(`./Images/${champ.value}.png`)//`http://ddragon.leagueoflegends.com/cdn/${patch}/img/champion/${champ.value}.png`
-      img.src = `http://ddragon.leagueoflegends.com/cdn/${patch}/img/champion/${champ.value}.png`
+      img.src = `https://ddragon.leagueoflegends.com/cdn/${patch}/img/champion/${champ.value}.png`
       championToImage.set(champ.value, img)
     })
     setChampionToImage(championToImage)

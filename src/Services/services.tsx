@@ -1,5 +1,5 @@
 export const getChampion = (patch: string): Promise<any> => {
-    return fetch(`http://ddragon.leagueoflegends.com/cdn/${patch}/data/en_US/champion.json`)
+    return fetch(`https://ddragon.leagueoflegends.com/cdn/${patch}/data/en_US/champion.json`)
         .then(response => {
             if (!response.ok) {
                 throw new Error("HTTP error " + response.status);
