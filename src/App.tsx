@@ -157,7 +157,7 @@ function App() {
   const [infoModalContent, setInfoModalContent] = useState<any>(<></>)
 
 
-  const patch = '13.11.1'
+  const patch = '13.14.1'
 
   useEffect(() => {
     GA4.initialize("G-BPQ188CVYS")
