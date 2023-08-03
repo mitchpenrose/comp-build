@@ -676,6 +676,45 @@ function App() {
       setInfoModalContent(`We'd love to hear from you! If you have any questions, suggestions, or business 
       opportunities to discuss, feel free to reach out at [email]. Our team is always here to help.`)
     }
+    else if (title === 'Privacy Policy') {
+      setInfoModalContent(<div>
+        <p>Last updated: 8/2/2023</p>
+        <h2>1. Introduction</h2>
+        <p>Composition Builder values your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website and use our dynamic tool for League of Legends players. Please read this Privacy Policy carefully. If you do not agree with the terms of this Privacy Policy, please do not access the site.</p>
+        <h2>2. Information We Collect</h2>
+        <p>We may collect information about you in various ways, including:</p>
+        <ul>
+          <li>Automatically Collected Data: We collect data automatically when you visit our website, such as your IP address, browser type, operating system, page views, scrolls, user engagement, and other statistics. We utilize Google Analytics to track this information.</li>
+          <li>Location Information: We collect information about your country of origin and more localized data for a 30-minute real-time overview.</li>
+        </ul>
+        <h2>3. How We Use Your Information</h2>
+        <p>We may use the information we collect about you to:</p>
+        <ul>
+          <li>Enhance your user experience.</li>
+          <li>Understand and analyze the usage trends and preferences of our users.</li>
+          <li>Improve the functionality and features of Composition Builder.</li>
+          <li>Monitor and analyze the effectiveness of Composition Builder and our marketing activities.</li>
+          <li>Detect, prevent, or investigate security breaches or fraud.</li>
+        </ul>
+        <h2>4. How We Share Your Information</h2>
+        <p>We may share your information with third-party vendors, service providers, contractors, or agents who perform services for us or on our behalf, including Google Analytics.</p>
+        <h2>5. Cookies and Tracking Technologies</h2>
+        <p>We may use cookies, web beacons, and other tracking technologies to collect and store your information. We utilize Google Analytics to help us understand how our website is being used.</p>
+        <p>If you wish to opt out of Google Analytics tracking, you may download and install the <a href="https://tools.google.com/dlpage/gaoptout">Google Analytics Opt-out Browser Add-on</a>. The add-on is designed to be compatible with Chrome, Safari, Firefox, and Microsoft Edge and allows website visitors the ability to prevent their data from being used by Google Analytics. More information about the opt-out and how to properly install the browser add-on can be found at the aforementioned link.</p>
+        <h2>6. Security</h2>
+        <p>We take your security seriously. Composition Builder uses HTTPS and TLS encryption to ensure that the minimal information we collect is transmitted securely. We also employ reasonable administrative, technical, and physical security measures to protect your personal information. We strive to protect your information to the fullest extent possible.</p>
+        <h2>7. Google AdSense</h2>
+        <p>If we employ Google AdSense, we adhere to Google's policies, and we disclose the use of cookies and/or web beacons to collect data in the ad serving process.</p>
+        <h2>8. Your Rights</h2>
+        <p>Depending on your jurisdiction, you may have certain rights regarding your personal information, such as the right to access, rectification, erasure, restriction of processing, data portability, object to processing, or lodge a complaint with a supervisory authority.</p>
+        <p>We encourage you to familiarize yourself with these rights, which may vary depending on local regulations. You can typically find information about your rights from governmental or regulatory bodies responsible for data protection in your jurisdiction or from local consumer protection agencies.</p>
+        <h2>9. Changes to This Privacy Policy</h2>
+        <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page.</p>
+        <h2>10. Contact Us</h2>
+        <p>If you have any questions or comments about this Privacy Policy, please contact us at:</p>
+        <a href="mailto:compbuildergg@gmail.com">compbuildergg@gmail.com</a>
+      </div>)
+    }
     setInfoModalTitle(title)
     setShowInfoModal(true)
   }
@@ -694,7 +733,7 @@ function App() {
     <Context.Provider value={{ champData: championSelections, patch: patch, selectedChampions: pickedChamps, championToImage: championToImage } as Data}>
       <div id='yoyo'>
         <GlobalStyle />
-        <Modal isOpen={showInfoModal} onClose={() => { setShowInfoModal(false) }} title={infoModalTitle} height={infoModalTitle === 'About' ? undefined : 'fit-content'}>
+        <Modal isOpen={showInfoModal} onClose={() => { setShowInfoModal(false) }} title={infoModalTitle} height={(infoModalTitle === 'About' || infoModalTitle === 'Privacy Policy') ? undefined : 'fit-content'}>
           <div>
             {infoModalContent}
           </div>
@@ -809,7 +848,9 @@ function App() {
         <Footer>
           <SubButton onClick={() => setupInfoModal('About')}>About</SubButton>
           <SubButton onClick={() => setupInfoModal('Contact')}>Contact</SubButton>
+          <SubButton onClick={() => setupInfoModal('Privacy Policy')}>Privacy Policy</SubButton>
           <SubButton onClick={() => setupInfoModal('Legal')}>Legal</SubButton>
+          
           {/* <SubButton>Donate</SubButton> */}
         </Footer>
       </div>
