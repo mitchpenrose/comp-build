@@ -673,8 +673,9 @@ function App() {
       or registered trademarks of Riot Games, Inc.`)
     }
     else if (title === 'Contact') {
-      setInfoModalContent(`We'd love to hear from you! If you have any questions, suggestions, or business 
-      opportunities to discuss, feel free to reach out at [email]. Our team is always here to help.`)
+      setInfoModalContent(
+        <div>We'd love to hear from you! If you have any questions, suggestions, or business 
+        opportunities to discuss, feel free to reach out at <a href="mailto:compbuildergg@gmail.com">compbuildergg@gmail.com</a>. Our team is always here to help.</div>)
     }
     else if (title === 'Privacy Policy') {
       setInfoModalContent(<div>
@@ -848,8 +849,8 @@ function App() {
         <Footer>
           <SubButton onClick={() => setupInfoModal('About')}>About</SubButton>
           <SubButton onClick={() => setupInfoModal('Contact')}>Contact</SubButton>
-          <SubButton onClick={() => setupInfoModal('Privacy Policy')}>Privacy Policy</SubButton>
           <SubButton onClick={() => setupInfoModal('Legal')}>Legal</SubButton>
+          <SubButton onClick={() => setupInfoModal('Privacy Policy')}>Privacy Policy</SubButton>
           
           {/* <SubButton>Donate</SubButton> */}
         </Footer>
