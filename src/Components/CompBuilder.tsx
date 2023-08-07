@@ -4,6 +4,7 @@ import ChampionSelect, { CallbackData } from './ChampionSelect'
 import { JSX } from 'react/jsx-runtime'
 import Context from '../Context/Context'
 import Modal from './Modal'
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Container = styled.div`
     margin-top: auto;
@@ -89,7 +90,6 @@ interface Props {
 
 
 const CompBuilder = ({championWinRates, pickedChamps, setPickedChamps}: Props) => {
-
     const data = useContext(Context)
 
     interface winLoss {

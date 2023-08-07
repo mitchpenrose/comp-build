@@ -7,6 +7,9 @@ import { ReactComponent as Logo } from './icons/logo.svg'
 import Modal from './Components/Modal'
 import GA4 from 'react-ga4'
 import CompBuilder from './Components/CompBuilder'
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import WinRates from './Components/WinRates'
+import Tabs from './Components/Tabs'
 
 // Modal.setAppElement('#root')
 const GlobalStyle = createGlobalStyle`
@@ -49,6 +52,9 @@ const SubButton = styled.div`
 `
 
 function App() {
+
+  // const navigate = useNavigate()
+
   const [championSelections, setChampionSelections] = useState<{ value: string, label: string }[]>([])
   const [championToImage, setChampionToImage] = useState(new Map<string, any>())
   const [pickedChamps, setPickedChamps] = useState<string[]>([])
@@ -58,7 +64,6 @@ function App() {
   const [showInfoModal, setShowInfoModal] = useState<boolean>(false)
   const [infoModalTitle, setInfoModalTitle] = useState<string>('')
   const [infoModalContent, setInfoModalContent] = useState<any>(<></>)
-
 
   const patch = '13.14.1'
 
@@ -116,8 +121,8 @@ function App() {
     }
     else if (title === 'Contact') {
       setInfoModalContent(
-        <div>We'd love to hear from you! If you have any questions, suggestions, or business 
-        opportunities to discuss, feel free to reach out at <a href="mailto:compbuildergg@gmail.com">compbuildergg@gmail.com</a>. Our team is always here to help.</div>)
+        <div>We'd love to hear from you! If you have any questions, suggestions, or business
+          opportunities to discuss, feel free to reach out at <a href="mailto:compbuildergg@gmail.com">compbuildergg@gmail.com</a>. Our team is always here to help.</div>)
     }
     else if (title === 'Privacy Policy') {
       setInfoModalContent(<div>
@@ -177,7 +182,16 @@ function App() {
             Patch {patch}
           </PatchInfo>
         </Header>
-        <CompBuilder championWinRates={championWinRates} pickedChamps={pickedChamps} setPickedChamps={setPickedChamps} />
+
+        <BrowserRouter>
+          <Tabs/>
+          <Routes>
+            <Route path='/' element={<CompBuilder championWinRates={championWinRates} pickedChamps={pickedChamps} setPickedChamps={setPickedChamps} />} />
+            <Route path='/winrates' element={<WinRates />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </BrowserRouter>
+
         <Footer>
           <SubButton onClick={() => setupInfoModal('About')}>About</SubButton>
           <SubButton onClick={() => setupInfoModal('Contact')}>Contact</SubButton>
