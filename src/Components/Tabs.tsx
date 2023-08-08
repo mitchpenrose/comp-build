@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 const TabsContainer = styled.div`
   display: flex;
   height: 30px;
+  min-width: 1210px;
 `
 
 const TabItem = styled.div<{ selected: boolean }>`

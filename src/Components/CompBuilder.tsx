@@ -4,7 +4,7 @@ import ChampionSelect, { CallbackData } from './ChampionSelect'
 import { JSX } from 'react/jsx-runtime'
 import Context from '../Context/Context'
 import Modal from './Modal'
-import { useLocation, useNavigate } from "react-router-dom";
+import { getColorForPercentage } from '../Utils/utils'
 
 const Container = styled.div`
     margin-top: auto;
@@ -224,31 +224,6 @@ const CompBuilder = ({championWinRates, pickedChamps, setPickedChamps}: Props) =
     const clearBlueCustomChamp = (index: number) => {
         blueCustomChamps[index] = null
         setBlueCustomChamps([...blueCustomChamps])
-    }
-
-    const getColorForPercentage = (pct: number) => {
-        const percentColors = [
-            { pct: 0.45, color: { r: 0xff, g: 0x00, b: 0 } },
-            { pct: 0.5, color: { r: 0xff, g: 0xff, b: 0 } },
-            { pct: .55, color: { r: 0x00, g: 0xff, b: 0 } }]
-
-        for (var i = 1; i < percentColors.length - 1; i++) {
-            if (pct < percentColors[i].pct) {
-                break
-            }
-        }
-        var lower = percentColors[i - 1]
-        var upper = percentColors[i]
-        var range = upper.pct - lower.pct
-        var rangePct = (pct - lower.pct) / range
-        var pctLower = 1 - rangePct
-        var pctUpper = rangePct
-        var color = {
-            r: Math.floor(lower.color.r * pctLower + upper.color.r * pctUpper),
-            g: Math.floor(lower.color.g * pctLower + upper.color.g * pctUpper),
-            b: Math.floor(lower.color.b * pctLower + upper.color.b * pctUpper)
-        }
-        return 'rgb(' + [color.r, color.g, color.b].join(',') + ')'
     }
 
     const getSynergyWinPercentage = (data: any, subData: any) => {
@@ -501,7 +476,7 @@ const CompBuilder = ({championWinRates, pickedChamps, setPickedChamps}: Props) =
                     }
                     setShowConfusedModal(false)
                 }} />
-                <div style={{ position: "absolute", zIndex: "100", bottom: "5px", color: getColorForPercentage(md.winPercent), userSelect: "none" }} key={index}>{(md.winPercent * 100).toFixed(2) + "%"}</div>
+                <div style={{ position: "absolute", zIndex: "100", bottom: "5px", color: getColorForPercentage(md.winPercent), userSelect: "none", backgroundColor: "black" }} key={index}>{(md.winPercent * 100).toFixed(2) + "%"}</div>
             </div>)
             if (group.length === 4 || index === modalData.length - 1) {
                 return <div style={{ display: "flex", marginLeft: "8px" }} key={index}>

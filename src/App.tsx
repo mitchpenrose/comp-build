@@ -27,8 +27,7 @@ const Header = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
-  min-width: 1718px;
-  //width: ${window.outerWidth}px;
+  min-width: 1210px;//1718
 `
 
 const Footer = styled.div`
@@ -36,7 +35,7 @@ const Footer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  min-width: 1718px;
+  min-width: 1210px;
 `
 
 const PatchInfo = styled.div`
@@ -187,7 +186,7 @@ function App() {
           <Tabs/>
           <Routes>
             <Route path='/' element={<CompBuilder championWinRates={championWinRates} pickedChamps={pickedChamps} setPickedChamps={setPickedChamps} />} />
-            <Route path='/winrates' element={<WinRates />} />
+            <Route path='/winrates' element={<WinRates championWinRates={championWinRates} />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </BrowserRouter>
