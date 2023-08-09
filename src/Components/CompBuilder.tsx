@@ -477,6 +477,7 @@ const CompBuilder = ({championWinRates, pickedChamps, setPickedChamps}: Props) =
                     setShowConfusedModal(false)
                 }} />
                 <div style={{ position: "absolute", zIndex: "100", bottom: "5px", color: getColorForPercentage(md.winPercent), userSelect: "none", backgroundColor: "black" }} key={index}>{(md.winPercent * 100).toFixed(2) + "%"}</div>
+                <div style={{ position: "absolute", zIndex: "100", top: "0px", backgroundColor: "rgba(125, 125, 125, 0.5)"}}>{data.champData.find((data) => data.value === md.id)?.label}</div>
             </div>)
             if (group.length === 4 || index === modalData.length - 1) {
                 return <div style={{ display: "flex", marginLeft: "8px" }} key={index}>

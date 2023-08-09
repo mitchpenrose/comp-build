@@ -45,6 +45,16 @@ const WinRates = ({ championWinRates }: Props) => {
     const data = useContext(Context)
     const [selectedPosition, setSelectedPosition] = useState(positions[0])
 
+    const getColorForGames = (games: number) => {
+        if(games < 500){
+            return 'rgb(255,0,0)'
+        }
+        if(games < 1000){
+            return 'rgb(255,255,0)'
+        }
+        return 'rgb(0,255,0)'
+    }
+
     const winRateData = useMemo(() => {
         if (data.championToImage.size === 0) {
             return
@@ -55,7 +65,9 @@ const WinRates = ({ championWinRates }: Props) => {
         championWinRates[selectedPosition.value].forEach((champStats: { key: string, wins: number, losses: number, pct: number }, index: number) => {
             row.push(<div style={{ marginLeft: '3px', position: 'relative' }} key={index}>
                 <img src={data.championToImage.get(champStats.key).src} />
-                <div style={{ position: "absolute", bottom: "5px", color: getColorForPercentage(champStats.pct), userSelect: "none", backgroundColor: "black" }} key={index}>{(champStats.pct * 100).toFixed(2) + "%"}</div>
+                <div style={{ position: "absolute", top: "0px", backgroundColor: "rgba(125, 125, 125, 0.5)"}}>{data.champData.find((data) => data.value === champStats.key)?.label}</div>
+                <div style={{ position: "absolute", bottom: "25px", color: getColorForPercentage(champStats.pct), userSelect: "none", backgroundColor: "black" }} key={index}>{(champStats.pct * 100).toFixed(2) + "%"}</div>
+                <div style={{ position: "absolute", bottom: "5px", color: getColorForGames(champStats.wins+champStats.losses), userSelect: "none", backgroundColor: "black" }} key={(index+1)*2}>{`${champStats.wins}/${champStats.wins+champStats.losses}`}</div>
             </div>)
             if (row.length === 9 || index === length - 1) {
                 rows.push(row)
