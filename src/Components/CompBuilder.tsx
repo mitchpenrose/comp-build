@@ -463,21 +463,20 @@ const CompBuilder = ({championWinRates, pickedChamps, setPickedChamps}: Props) =
             if (group.length === 4) {
                 group = []
             }
-            group.push(<div key={index} style={{ marginLeft: "3px", position: "relative" }}>
-                <img src={data.championToImage.get(md.id).src} style={{ cursor: "pointer" }} onClick={() => {
-                    if (currentCustomChamp.redOrBlue === 'red') {
-                        redCustomChamps[currentCustomChamp.index] = md.id
-                        //debugger
-                        setRedCustomChamps([...redCustomChamps])
-                    }
-                    else {
-                        blueCustomChamps[currentCustomChamp.index] = md.id
-                        setBlueCustomChamps([...blueCustomChamps])
-                    }
-                    setShowConfusedModal(false)
-                }} />
+            group.push(<div key={index} style={{ marginLeft: "3px", position: "relative" }} onClick={() => {
+                if (currentCustomChamp.redOrBlue === 'red') {
+                    redCustomChamps[currentCustomChamp.index] = md.id
+                    setRedCustomChamps([...redCustomChamps])
+                }
+                else {
+                    blueCustomChamps[currentCustomChamp.index] = md.id
+                    setBlueCustomChamps([...blueCustomChamps])
+                }
+                setShowConfusedModal(false)
+            }}>
+                <img src={data.championToImage.get(md.id).src} style={{ cursor: "pointer" }}/>
                 <div style={{ position: "absolute", zIndex: "100", bottom: "5px", color: getColorForPercentage(md.winPercent), userSelect: "none", backgroundColor: "black" }} key={index}>{(md.winPercent * 100).toFixed(2) + "%"}</div>
-                <div style={{ position: "absolute", zIndex: "100", top: "0px", backgroundColor: "rgba(125, 125, 125, 0.5)"}}>{data.champData.find((data) => data.value === md.id)?.label}</div>
+                <div style={{ position: "absolute", userSelect: "none", zIndex: "100", top: "0px", backgroundColor: "rgba(125, 125, 125, 0.5)"}}>{data.champData.find((data) => data.value === md.id)?.label}</div>
             </div>)
             if (group.length === 4 || index === modalData.length - 1) {
                 return <div style={{ display: "flex", marginLeft: "8px" }} key={index}>
