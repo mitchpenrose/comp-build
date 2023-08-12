@@ -63,6 +63,8 @@ function App() {
   const [showInfoModal, setShowInfoModal] = useState<boolean>(false)
   const [infoModalTitle, setInfoModalTitle] = useState<string>('')
   const [infoModalContent, setInfoModalContent] = useState<any>(<></>)
+  const [loading, setLoading] = useState<Promise<void>[]>([new Promise(() => {}), new Promise(() => {}), new Promise(() => {})])
+  const [currentlyLoading, setCurrentlyLoading] = useState(true)
 
   const patch = '13.14.1'
 
@@ -74,10 +76,14 @@ function App() {
   useEffect(() => {
     getWinrates().then((result) => {
       setChampionWinRates(result)
+      loading[0] = Promise.resolve()
+      setLoading([...loading])
     })
     getChampion(patch).then((result) => {
       const data = result.data as Record<string, { id: string, name: string }>;
       setChampionSelections(Object.entries(data).map(([, value]) => { return { value: value.id, label: value.name } }))
+      loading[1] = Promise.resolve()
+      setLoading([...loading])
     })
   }, [])
 
@@ -90,7 +96,15 @@ function App() {
       championToImage.set(champ.value, img)
     })
     setChampionToImage(championToImage)
+    loading[2] = Promise.resolve()
+    setLoading([...loading])
   }, [championSelections.length])
+
+  useMemo(async () => {
+    if(await Promise.all(loading)){
+      setCurrentlyLoading(false)
+    }
+  }, [loading])
 
   const setupInfoModal = (title: string) => {
     if (title === 'About') {
@@ -167,7 +181,7 @@ function App() {
   }
 
   return (
-    <Context.Provider value={{ champData: championSelections, patch: patch, selectedChampions: pickedChamps, championToImage: championToImage } as Data}>
+    currentlyLoading === false && <Context.Provider value={{ champData: championSelections, patch: patch, selectedChampions: pickedChamps, championToImage: championToImage, loading: currentlyLoading } as Data}>
       <div id='main'>
         <GlobalStyle />
         <Modal isOpen={showInfoModal} onClose={() => { setShowInfoModal(false) }} title={infoModalTitle} height={(infoModalTitle === 'About' || infoModalTitle === 'Privacy Policy') ? undefined : 'fit-content'}>

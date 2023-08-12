@@ -63,7 +63,7 @@ const WinRates = ({ championWinRates }: Props) => {
     }
 
     useMemo(() => {
-        if (data.championToImage.size === 0 || selectedPosition.value !== 'ALL POSITIONS') {
+        if (selectedPosition.value !== 'ALL POSITIONS') {
             return
         }
         const anyPositionMap = new Map<string, value>()
@@ -82,14 +82,14 @@ const WinRates = ({ championWinRates }: Props) => {
         })
         champStats.sort((a, b) => { return b.pct - a.pct })
         setCurrentChampStats(champStats)
-    }, [data.championToImage, selectedPosition])
+    }, [selectedPosition])
 
     useMemo(() => {
-        if (data.championToImage.size === 0 || selectedPosition.value === 'ALL POSITIONS') {
+        if (selectedPosition.value === 'ALL POSITIONS') {
             return
         }
         setCurrentChampStats(championWinRates[selectedPosition.value])
-    }, [data.championToImage, selectedPosition])
+    }, [selectedPosition])
 
     const sortedFilteredData = useMemo(() => {
         if(selectedSort.value === 'WIN RATE'){
