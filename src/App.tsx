@@ -181,7 +181,7 @@ function App() {
   }
 
   return (
-    currentlyLoading === false && <Context.Provider value={{ champData: championSelections, patch: patch, selectedChampions: pickedChamps, championToImage: championToImage, loading: currentlyLoading } as Data}>
+    currentlyLoading === false ? <Context.Provider value={{ champData: championSelections, patch: patch, selectedChampions: pickedChamps, championToImage: championToImage, loading: currentlyLoading } as Data}>
       <div id='main'>
         <GlobalStyle />
         <Modal isOpen={showInfoModal} onClose={() => { setShowInfoModal(false) }} title={infoModalTitle} height={(infoModalTitle === 'About' || infoModalTitle === 'Privacy Policy') ? undefined : 'fit-content'}>
@@ -214,6 +214,7 @@ function App() {
         </Footer>
       </div>
     </Context.Provider>
+    : <div/>
   );
 }
 
