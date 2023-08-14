@@ -4,17 +4,18 @@ import { ReactComponent as CloseIcon } from '../icons/close.svg'
 interface Props {
     isOpen: boolean,
     onClose: () => void,
-    title: string
+    title: any
     children?: React.ReactNode
     height?: string
+    width?: string
 }
 
 Modal.setAppElement('#root')
 
-const Mod = ({ isOpen, onClose, children, title, height="500px" }: Props) => {
+const Mod = ({ isOpen, onClose, children, title, height="500px", width="512px" }: Props) => {
     return <Modal isOpen={isOpen} style={{
         content: {
-            width: "512px",
+            width: width,
             height: height,
             margin: "auto",
             background: "#282c34",

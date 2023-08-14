@@ -80,7 +80,7 @@ function App() {
       setLoading([...loading])
     })
     getChampion(patch).then((result) => {
-      const data = result.data as Record<string, { id: string, name: string }>;
+      const data = result.data as Record<string, { id: string, name: string }>
       setChampionSelections(Object.entries(data).map(([, value]) => { return { value: value.id, label: value.name } }))
       loading[1] = Promise.resolve()
       setLoading([...loading])
