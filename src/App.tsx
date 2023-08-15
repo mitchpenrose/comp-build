@@ -63,7 +63,7 @@ function App() {
   const [showInfoModal, setShowInfoModal] = useState<boolean>(false)
   const [infoModalTitle, setInfoModalTitle] = useState<string>('')
   const [infoModalContent, setInfoModalContent] = useState<any>(<></>)
-  const [loading, setLoading] = useState<Promise<void>[]>([new Promise(() => {}), new Promise(() => {}), new Promise(() => {})])
+  const [loading, setLoading] = useState<Promise<void>[]>([new Promise(() => { }), new Promise(() => { }), new Promise(() => { })])
   const [currentlyLoading, setCurrentlyLoading] = useState(true)
 
   const patch = '13.14.1'
@@ -101,7 +101,7 @@ function App() {
   }, [championSelections.length])
 
   useMemo(async () => {
-    if(await Promise.all(loading)){
+    if (await Promise.all(loading)) {
       setCurrentlyLoading(false)
     }
   }, [loading])
@@ -189,15 +189,15 @@ function App() {
             {infoModalContent}
           </div>
         </Modal>
-        <Header id='header'>
-          <Logo />
-          <PatchInfo>
-            Patch {patch}
-          </PatchInfo>
-        </Header>
 
         <BrowserRouter>
-          <Tabs/>
+          <Header id='header'>
+            <Logo />
+            <Tabs />
+            <PatchInfo>
+              Patch {patch}
+            </PatchInfo>
+          </Header>
           <Routes>
             <Route path='/' element={<CompBuilder championWinRates={championWinRates} pickedChamps={pickedChamps} setPickedChamps={setPickedChamps} />} />
             <Route path='/winrates' element={<WinRates championWinRates={championWinRates} />} />
@@ -214,7 +214,7 @@ function App() {
         </Footer>
       </div>
     </Context.Provider>
-    : <div/>
+      : <div />
   );
 }
 
