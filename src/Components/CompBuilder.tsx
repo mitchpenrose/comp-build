@@ -557,7 +557,7 @@ const CompBuilder = ({championWinRates, pickedChamps, setPickedChamps}: Props) =
         }
       }
 
-    return (< div style={{ position: "relative", width: "max-content", margin: "auto" }
+    return (< div style={{ position: "relative", width: "max-content", margin: "auto", scale: "75%", marginTop: "-100px", marginBottom: "-100px" }
     } id="compbuilder" >
         <Modal isOpen={showConfusedModal} onClose={() => setShowConfusedModal(false)} title={recommendedChampionsTitle}>
             {modalJsx as any}

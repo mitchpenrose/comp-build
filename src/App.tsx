@@ -36,6 +36,7 @@ const Footer = styled.div`
   justify-content: center;
   align-items: center;
   min-width: 1210px;
+  height: 100px;
 `
 
 const PatchInfo = styled.div`
@@ -48,6 +49,7 @@ const SubButton = styled.div`
   margin-left: 50px;
   margin-right: 50px;
   cursor: pointer;
+  user-select: none;
 `
 
 function App() {
@@ -180,6 +182,14 @@ function App() {
     setShowInfoModal(true)
   }
 
+  const formattedPatch = () => {
+    const split = patch.split(".")
+    if(split[split.length-1] === '1'){
+      return `${split[0]}.${split[1]}`
+    }
+    return patch
+  }
+
   return (
     currentlyLoading === false ? <Context.Provider value={{ champData: championSelections, patch: patch, selectedChampions: pickedChamps, championToImage: championToImage, loading: currentlyLoading } as Data}>
       <div id='main'>
@@ -195,7 +205,7 @@ function App() {
             <Logo />
             <Tabs />
             <PatchInfo>
-              Patch {patch}
+              Patch {formattedPatch()}
             </PatchInfo>
           </Header>
           <Routes>

@@ -12,6 +12,7 @@ const TabItem = styled.div<{ selected: boolean }>`
   cursor: pointer;
   text-decoration: ${props => props.selected === true ? 'underline' : 'null'};
   font-size: large;
+  user-select: none;
 `
 
 const Tabs = () => {
