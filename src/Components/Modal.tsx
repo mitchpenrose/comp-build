@@ -8,11 +8,12 @@ interface Props {
     children?: React.ReactNode
     height?: string
     width?: string
+    titleStyle?: any
 }
 
 Modal.setAppElement('#root')
 
-const Mod = ({ isOpen, onClose, children, title, height="500px", width="512px" }: Props) => {
+const Mod = ({ isOpen, onClose, children, title, height="500px", width="512px", titleStyle }: Props) => {
     return <Modal isOpen={isOpen} style={{
         content: {
             width: width,
@@ -26,7 +27,7 @@ const Mod = ({ isOpen, onClose, children, title, height="500px", width="512px" }
         },
     }} onRequestClose={onClose}>
         <div style={{ position: "relative" }}>
-            <div style={{ textAlign: "center", marginBottom: "15px", fontSize: "larger" }}>{title}
+            <div style={titleStyle ?? { textAlign: "center", marginBottom: "15px", fontSize: "larger" }}>{title}
                 <CloseIcon width={35} height={35} onClick={onClose} cursor={"pointer"} style={{ float: "right", position: "absolute", top: "-15px", right: "-15px" }} />
             </div>
         </div>

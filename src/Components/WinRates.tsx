@@ -3,9 +3,10 @@ import Context, { ChampionSelection } from "../Context/Context"
 import { JSX } from "react/jsx-runtime"
 import { getColorForPercentage } from "../Utils/utils"
 import styled from "styled-components"
-import Select, { ControlProps, GroupBase, components } from 'react-select'
+import Select from 'react-select'
 import Modal from "./Modal"
 import { getChampData, getData } from "../Services/services"
+import Input from "./Input"
 
 
 const StyledSelect = styled(Select)`
@@ -52,11 +53,13 @@ const WinRates = ({ championWinRates }: Props) => {
     const data = useContext(Context)
     const [selectedPosition, setSelectedPosition] = useState(positions[0])
     const [selectedSort, setSelectedSort] = useState(sorting[0])
+    const [selectedModalSort, setSelectedModalSort] = useState(sorting[0])
     const [currentChampStats, setCurrentChampStats] = useState<ChampStat[]>([])
     const [filterValue, setFilterValue] = useState<string>('')
+    const [filterModalValue, setFilterModalValue] = useState<string>('')
+    const [gamesGreaterModal, setGamesGreaterModal] = useState<number>(0)
     const [showDataModal, setShowDataModal] = useState<boolean>(false)
     const [selectedChampion, setSelectedChampion] = useState<ChampionSelection>()
-    const [modalTitle, setModalTitle] = useState<ReactElement>(<></>)
     const [selectedModalPosition, setSelectedModalPosition] = useState(positions[0])
     const [selectedCompareModalPosition, setSelectedCompareModalPosition] = useState(positions[0])
     const [selectedOpponentOrTeam, setSelectedOpponentOrTeam] = useState(opponentOrTeam[0])
@@ -166,12 +169,28 @@ const WinRates = ({ championWinRates }: Props) => {
         championToData.forEach((value, key) => {
             champStats.push({ key: key, wins: value.wins, losses: value.losses, pct: value.wins / (value.wins + value.losses) })
         })
-        champStats.sort((a, b) => { return b.pct - a.pct })
+        if(selectedModalSort.value === 'WIN RATE'){
+            champStats.sort((a, b) => { return b.pct - a.pct })
+        }
+        else if(selectedModalSort.value === 'PLAY RATE'){
+            champStats.sort((a, b) => { return (b.wins + b.losses) - (a.wins + a.losses) })
+        }
+
+        let filtered = champStats
+        if (filterModalValue !== '') {
+            const filterOn = filterModalValue.toLowerCase()
+            filtered = champStats.filter((ccs) => {
+                const legitName = data.champData.find((data) => data.value === ccs.key)?.label.toLowerCase()
+                return legitName?.includes(filterOn) || legitName?.replaceAll('\'', '').replaceAll(' ', '').replaceAll('.', '').includes(filterOn)
+            })
+        }
+        filtered = filtered.filter((f) => f.wins + f.losses > gamesGreaterModal)
+        
 
         let row: JSX.Element[] = []
         let rows: JSX.Element[][] = []
-        const length = champStats.length
-        champStats.forEach((champStats: ChampStat, index: number) => {
+        const length = filtered.length
+        filtered.forEach((champStats: ChampStat, index: number) => {
             const name = data.champData.find((data) => data.value === champStats.key)?.label
             row.push(<div style={{ marginLeft: '3px', position: 'relative', cursor: 'pointer' }} key={index} onClick={() => clickChampion(name!)}>
                 <img src={data.championToImage.get(champStats.key).src} />
@@ -187,7 +206,7 @@ const WinRates = ({ championWinRates }: Props) => {
         return rows.map((r, index) => {
             return <div key={index} style={{ display: 'flex' }}>{r}</div>
         })
-    }, [champData, selectedOpponentOrTeam.label, selectedCompareModalPosition.label])
+    }, [champData, selectedOpponentOrTeam.label, selectedCompareModalPosition.label, selectedModalSort.label, filterModalValue, gamesGreaterModal])
 
     const sortedFilteredData = useMemo(() => {
         if (selectedSort.label === 'WIN RATE') {
@@ -226,15 +245,31 @@ const WinRates = ({ championWinRates }: Props) => {
         })
     }, [currentChampStats, selectedSort, filterValue])
 
-    return <div style={{display: 'flex'}}>
-        <div style={{minWidth: '195px'}}/>
+    const closeModal = () => {
+        setShowDataModal(false)
+        setSelectedModalSort(sorting[0])
+        setFilterModalValue('')
+    }
+
+    return <div style={{ display: 'flex' }}>
+        <div style={{ minWidth: '195px' }} />
         <div style={{ width: '1110px', margin: 'auto', padding: '50px' }}>
-            <Modal width={"1110px"} isOpen={showDataModal} onClose={() => setShowDataModal(false)} title={<div><div>{`${selectedChampion?.label} In ${selectedModalPosition.value} ${selectedOpponentOrTeam.value} Champions In ${selectedCompareModalPosition.value}`}</div><div style={{ display: 'flex', justifyContent: 'center' }}>
-                <StyledSelect options={data.champData} onChange={(selected) => { setSelectedChampion(selected as ChampionSelection) }} value={selectedChampion} />
-                <StyledSelect options={positions} onChange={(selected) => setSelectedModalPosition(selected as { value: string, label: string })} value={selectedModalPosition} />
-                <StyledSelect options={opponentOrTeam} onChange={(selected) => setSelectedOpponentOrTeam(selected as { value: string, label: string })} value={selectedOpponentOrTeam} />
-                <StyledSelect options={positions} onChange={(selected) => setSelectedCompareModalPosition(selected as { value: string, label: string })} value={selectedCompareModalPosition} />
-            </div></div>}>
+            <Modal width={"1110px"} isOpen={showDataModal} onClose={closeModal} titleStyle={{}} title={<div><div style={{ textAlign: "center", marginBottom: "15px", fontSize: "larger" }}>{`${selectedChampion?.label} In ${selectedModalPosition.value} ${selectedOpponentOrTeam.value} Champions In ${selectedCompareModalPosition.value}`}</div>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <StyledSelect options={data.champData} onChange={(selected) => { setSelectedChampion(selected as ChampionSelection) }} value={selectedChampion} />
+                    <StyledSelect options={positions} onChange={(selected) => setSelectedModalPosition(selected as { value: string, label: string })} value={selectedModalPosition} />
+                    <StyledSelect options={opponentOrTeam} onChange={(selected) => setSelectedOpponentOrTeam(selected as { value: string, label: string })} value={selectedOpponentOrTeam} />
+                    <StyledSelect options={positions} onChange={(selected) => setSelectedCompareModalPosition(selected as { value: string, label: string })} value={selectedCompareModalPosition} />
+                </div>
+                <div style={{display: 'flex'}}>
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '20px', marginRight: '10px', fontSize: 'large' }}>Sort By</div>
+                    <StyledSelect options={sorting} onChange={(selected) => { setSelectedModalSort(selected as { value: string, label: string }) }} value={selectedModalSort} />
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '20px', marginRight: '10px', fontSize: 'large' }}>Search</div>
+                    <Input setValue={setFilterModalValue} value={filterModalValue}/>
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '20px', marginRight: '10px', fontSize: 'large' }}>{`Number of Games >`}</div>
+                    <Input setValue={setGamesGreaterModal} value={gamesGreaterModal} defaultValue={0} type='number' maxLength={8}/>
+                </div>
+            </div>}>
                 {modalJsx}
             </Modal>
             <div style={{ display: 'flex', marginBottom: '10px' }}>
@@ -243,30 +278,11 @@ const WinRates = ({ championWinRates }: Props) => {
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '20px', marginRight: '10px', fontSize: 'large' }}>Sort By</div>
                 <StyledSelect options={sorting} onChange={(selected) => { setSelectedSort(selected as { value: string, label: string }) }} value={selectedSort} />
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '20px', marginRight: '10px', fontSize: 'large' }}>Search</div>
-                <StyledSelect
-                    isSearchable={true}
-                    isClearable={false}
-                    components={{
-                        DropdownIndicator: null,
-                        IndicatorSeparator: null,
-                    }}
-                    onInputChange={(value, action) => {
-                        if (action.action === 'input-change') {
-                            setFilterValue(value)
-                        }
-                    }}
-                    onFocus={() => {
-                        setFilterValue('')
-                    }}
-                    onBlur={() => null}
-                    options={[]}
-                    menuIsOpen={false}
-                    value={{ value: '', label: filterValue }}
-                />
+                <Input setValue={setFilterValue} value={filterValue}/>
             </div>
             {sortedFilteredData}
         </div>
-        <div style={{minWidth: '195px'}}/>
+        <div style={{ minWidth: '195px' }} />
     </div>
 }
 
