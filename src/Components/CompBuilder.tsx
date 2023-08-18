@@ -10,6 +10,8 @@ const Container = styled.div`
     margin-top: auto;
     margin-bottom: auto;
     display: flex;
+    margin-left: -65px;
+    margin-right: -65px;
 `
 
 const Column = styled.div`

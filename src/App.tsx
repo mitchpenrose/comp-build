@@ -27,7 +27,7 @@ const Header = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
-  min-width: 1210px;//1718
+  min-width: 1600px;//1718
 `
 
 const Footer = styled.div`
@@ -35,7 +35,7 @@ const Footer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  min-width: 1210px;
+  min-width: 1600px;
   height: 100px;
 `
 
@@ -182,7 +182,7 @@ function App() {
 
   const formattedPatch = () => {
     const split = patch.split(".")
-    if(split[split.length-1] === '1'){
+    if (split[split.length - 1] === '1') {
       return `${split[0]}.${split[1]}`
     }
     return patch
@@ -211,15 +211,15 @@ function App() {
             <Route path='/winrates' element={<WinRates championWinRates={championWinRates} />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
+          <Footer>
+            <SubButton onClick={() => setupInfoModal('About')}>About</SubButton>
+            <SubButton onClick={() => setupInfoModal('Contact')}>Contact</SubButton>
+            <SubButton onClick={() => setupInfoModal('Legal')}>Legal</SubButton>
+            <SubButton onClick={() => setupInfoModal('Privacy Policy')}>Privacy Policy</SubButton>
+            {/* <SubButton>Donate</SubButton> */}
+          </Footer>
         </BrowserRouter>
 
-        <Footer>
-          <SubButton onClick={() => setupInfoModal('About')}>About</SubButton>
-          <SubButton onClick={() => setupInfoModal('Contact')}>Contact</SubButton>
-          <SubButton onClick={() => setupInfoModal('Legal')}>Legal</SubButton>
-          <SubButton onClick={() => setupInfoModal('Privacy Policy')}>Privacy Policy</SubButton>
-          {/* <SubButton>Donate</SubButton> */}
-        </Footer>
       </div>
     </Context.Provider>
       : <div />
