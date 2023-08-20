@@ -23,7 +23,7 @@ const Mod = ({ isOpen, onClose, children, title, height="500px", width="512px", 
             border: "none"
         },
         overlay: {
-            backgroundColor: "rgba(255, 255, 255, 0.25)"
+            backgroundColor: "rgba(0, 0, 0, 0.65)"
         },
     }} onRequestClose={onClose}>
         <div style={{ position: "relative" }}>
