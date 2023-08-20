@@ -16,6 +16,7 @@ const Container = styled.div`
 
 const Column = styled.div`
     margin: auto;
+    min-width: 275px;
 `
 
 const HeaderBlock = styled.div`
@@ -48,7 +49,7 @@ const BlueHeader = styled.div`
 
 const ResultsView = styled.div`
     display: block;
-    margin-top: -100px;
+    margin-top: -50px;
 `
 
 const CenterText = styled.div`
@@ -61,9 +62,10 @@ const Results = styled.div`
     height: 150px;
     overflow: hidden;
     position: relative;
-    margin-top: 10px;
+    margin-top: 12px;
     margin-left: 20px;
     margin-right: 20px;
+    margin-bottom: 12px;
 `
 const ResultsTable = styled.table`
     width: max-content;
@@ -91,7 +93,7 @@ interface Props {
 
 
 
-const CompBuilder = ({championWinRates, pickedChamps, setPickedChamps}: Props) => {
+const CompBuilder = ({ championWinRates, pickedChamps, setPickedChamps }: Props) => {
     const data = useContext(Context)
 
     interface winLoss {
@@ -476,9 +478,9 @@ const CompBuilder = ({championWinRates, pickedChamps, setPickedChamps}: Props) =
                 }
                 setShowConfusedModal(false)
             }}>
-                <img src={data.championToImage.get(md.id).src} style={{ cursor: "pointer" }}/>
+                <img src={data.championToImage.get(md.id).src} style={{ cursor: "pointer" }} />
                 <div style={{ position: "absolute", zIndex: "100", bottom: "5px", color: getColorForPercentage(md.winPercent), userSelect: "none", backgroundColor: "black" }} key={index}>{(md.winPercent * 100).toFixed(2) + "%"}</div>
-                <div style={{ position: "absolute", userSelect: "none", zIndex: "100", top: "0px", backgroundColor: "rgba(125, 125, 125, 0.5)"}}>{data.champData.find((data) => data.value === md.id)?.label}</div>
+                <div style={{ position: "absolute", userSelect: "none", zIndex: "100", top: "0px", backgroundColor: "rgba(125, 125, 125, 0.5)" }}>{data.champData.find((data) => data.value === md.id)?.label}</div>
             </div>)
             if (group.length === 4 || index === modalData.length - 1) {
                 return <div style={{ display: "flex", marginLeft: "8px" }} key={index}>
@@ -532,32 +534,32 @@ const CompBuilder = ({championWinRates, pickedChamps, setPickedChamps}: Props) =
 
     const percentage = (wins: number, losses: number) => {
         return wins / (wins + losses)
-      }
-    
-      type winLossCountPercentage = {
+    }
+
+    type winLossCountPercentage = {
         wins: number,
         losses: number,
         count: number,
         summedPercent: number
-      }
-    
-      const getIndexGivenPosition = (position: string) => {
+    }
+
+    const getIndexGivenPosition = (position: string) => {
         if (position === 'TOP') {
-          return 0
+            return 0
         }
         else if (position === 'JUNGLE') {
-          return 1
+            return 1
         }
         else if (position === 'MID') {
-          return 2
+            return 2
         }
         else if (position === 'ADC') {
-          return 3
+            return 3
         }
         else {
-          return 4
+            return 4
         }
-      }
+    }
 
     return (< div style={{ position: "relative", width: "max-content", margin: "auto", scale: "75%", marginTop: "-100px", marginBottom: "-100px" }
     } id="compbuilder" >
@@ -572,7 +574,16 @@ const CompBuilder = ({championWinRates, pickedChamps, setPickedChamps}: Props) =
                 <ChampionSelect selectedChampion={redCustomChamps[2]} clearSelectedChampion={() => clearRedCustomChamp(2)} setPickedChamp={(champ: string) => { setPickedChamp(champ, 2) }} color='red' position='MID' dataCallback={(data: CallbackData) => { structureRedData(data, 2) }} bestChampionCallback={findBestChampions} />
                 <ChampionSelect selectedChampion={redCustomChamps[3]} clearSelectedChampion={() => clearRedCustomChamp(3)} setPickedChamp={(champ: string) => { setPickedChamp(champ, 3) }} color='red' position='ADC' dataCallback={(data: CallbackData) => { structureRedData(data, 3) }} bestChampionCallback={findBestChampions} />
                 <ChampionSelect selectedChampion={redCustomChamps[4]} clearSelectedChampion={() => clearRedCustomChamp(4)} setPickedChamp={(champ: string) => { setPickedChamp(champ, 4) }} color='red' position='SUPPORT' dataCallback={(data: CallbackData) => { structureRedData(data, 4) }} bestChampionCallback={findBestChampions} />
-                <Results />
+                <Results>
+                    <ResultsView>
+                        <RedHeader>
+                            Combined Results
+                        </RedHeader>
+                        <CenterText style={{ color: getColorForPercentage((redSynergyAverage + redMatchupAverage) / 200), height: "22px" }}>
+                            {!isNaN(redSynergyAverage) && !isNaN(redMatchupAverage) ? ((redSynergyAverage + redMatchupAverage) / 2).toFixed(2) + "%" : ''}
+                        </CenterText>
+                    </ResultsView>
+                </Results>
             </Column>
             <Column>
                 <HeaderBlock><RedHeader>Synergy</RedHeader></HeaderBlock>
@@ -582,7 +593,7 @@ const CompBuilder = ({championWinRates, pickedChamps, setPickedChamps}: Props) =
                         <RedHeader>
                             Average Synergy
                         </RedHeader>
-                        <CenterText style={{ color: getColorForPercentage(redSynergyAverage / 100), height: "22px" }}>
+                        <CenterText style={{ color: getColorForPercentage(redSynergyAverage / 100), height: "22px", marginBottom: "-6px" }}>
                             {isNaN(redSynergyAverage) ? '' : redSynergyAverage.toFixed(2) + "%"}
                         </CenterText>
                     </ResultsView>
@@ -596,7 +607,7 @@ const CompBuilder = ({championWinRates, pickedChamps, setPickedChamps}: Props) =
                         <RedHeader>
                             Average Matchup
                         </RedHeader>
-                        <CenterText style={{ color: getColorForPercentage(redMatchupAverage / 100), height: "22px" }}>
+                        <CenterText style={{ color: getColorForPercentage(redMatchupAverage / 100), height: "22px", marginBottom: "-6px" }}>
                             {isNaN(redMatchupAverage) ? '' : redMatchupAverage.toFixed(2) + "%"}
                         </CenterText>
                     </ResultsView>
@@ -610,7 +621,7 @@ const CompBuilder = ({championWinRates, pickedChamps, setPickedChamps}: Props) =
                         <BlueHeader>
                             Average Matchup
                         </BlueHeader>
-                        <CenterText style={{ color: getColorForPercentage(blueMatchupAverage / 100), height: "22px" }}>
+                        <CenterText style={{ color: getColorForPercentage(blueMatchupAverage / 100), height: "22px", marginBottom: "-6px" }}>
                             {isNaN(blueMatchupAverage) ? '' : blueMatchupAverage.toFixed(2) + "%"}
                         </CenterText>
                     </ResultsView>
@@ -624,7 +635,7 @@ const CompBuilder = ({championWinRates, pickedChamps, setPickedChamps}: Props) =
                         <BlueHeader>
                             Average Synergy
                         </BlueHeader>
-                        <CenterText style={{ color: getColorForPercentage(blueSynergyAverage / 100), height: "22px" }}>
+                        <CenterText style={{ color: getColorForPercentage(blueSynergyAverage / 100), height: "22px", marginBottom: "-6px" }}>
                             {isNaN(blueSynergyAverage) ? '' : blueSynergyAverage.toFixed(2) + "%"}
                         </CenterText>
                     </ResultsView>
@@ -637,29 +648,18 @@ const CompBuilder = ({championWinRates, pickedChamps, setPickedChamps}: Props) =
                 <ChampionSelect selectedChampion={blueCustomChamps[2]} clearSelectedChampion={() => clearBlueCustomChamp(2)} setPickedChamp={(champ: string) => { setPickedChamp(champ, 7) }} color='blue' position='MID' dataCallback={(data: CallbackData) => { structureBlueData(data, 2) }} bestChampionCallback={findBestChampions} />
                 <ChampionSelect selectedChampion={blueCustomChamps[3]} clearSelectedChampion={() => clearBlueCustomChamp(3)} setPickedChamp={(champ: string) => { setPickedChamp(champ, 8) }} color='blue' position='ADC' dataCallback={(data: CallbackData) => { structureBlueData(data, 3) }} bestChampionCallback={findBestChampions} />
                 <ChampionSelect selectedChampion={blueCustomChamps[4]} clearSelectedChampion={() => clearBlueCustomChamp(4)} setPickedChamp={(champ: string) => { setPickedChamp(champ, 9) }} color='blue' position='SUPPORT' dataCallback={(data: CallbackData) => { structureBlueData(data, 4) }} bestChampionCallback={findBestChampions} />
-                <Results />
+                <Results>
+                    <ResultsView>
+                        <BlueHeader>
+                            Combined Results
+                        </BlueHeader>
+                        <CenterText style={{ color: getColorForPercentage((blueSynergyAverage + blueMatchupAverage) / 200), height: "22px" }}>
+                            {!isNaN(blueSynergyAverage) && !isNaN(blueMatchupAverage) ? ((blueSynergyAverage + blueMatchupAverage) / 2).toFixed(2) + "%" : ''}
+                        </CenterText>
+                    </ResultsView>
+                </Results>
             </Column>
         </Container>
-        <div style={{ display: "flex", position: "absolute", left: "30%" }}>
-            <ResultsView>
-                <RedHeader>
-                    Combined Results
-                </RedHeader>
-                <CenterText style={{ color: getColorForPercentage((redSynergyAverage + redMatchupAverage) / 200) }}>
-                    {!isNaN(redSynergyAverage) && !isNaN(redMatchupAverage) ? ((redSynergyAverage + redMatchupAverage) / 2).toFixed(2) + "%" : ''}
-                </CenterText>
-            </ResultsView>
-        </div>
-        <div style={{ display: "flex", position: "absolute", right: "30%" }}>
-            <ResultsView>
-                <BlueHeader>
-                    Combined Results
-                </BlueHeader>
-                <CenterText style={{ color: getColorForPercentage((blueSynergyAverage + blueMatchupAverage) / 200) }}>
-                    {!isNaN(blueSynergyAverage) && !isNaN(blueMatchupAverage) ? ((blueSynergyAverage + blueMatchupAverage) / 2).toFixed(2) + "%" : ''}
-                </CenterText>
-            </ResultsView>
-        </div>
     </div >)
 }
 

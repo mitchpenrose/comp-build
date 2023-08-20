@@ -1,8 +1,8 @@
 import styled from "styled-components"
 import Select from 'react-select'
 
-const StyledSelect = styled(Select)`
-    width: 200px;
+const StyledSelect = styled(Select)<{ width?: string }>`
+    width: ${props => props.width ?? '200px'};
     color: #808080;
     .css-13cymwt-control{
         border-color: #54616b;
@@ -36,10 +36,12 @@ interface Props {
     defaultValue?: any
     type?: 'number'
     maxLength?: number
+    width?: string
 }
 
-const Input = ({setValue, value, defaultValue, type, maxLength}: Props) => {
+const Input = ({setValue, value, defaultValue, type, maxLength, width}: Props) => {
     return <StyledSelect
+    width={width}
     isSearchable={true}
     isClearable={false}
     components={{
@@ -51,7 +53,6 @@ const Input = ({setValue, value, defaultValue, type, maxLength}: Props) => {
             if(maxLength && value.length > maxLength){
                 return
             }
-            // debugger
             if(!type){
                 setValue(value)
             }
