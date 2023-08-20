@@ -54,6 +54,7 @@ const ResultsView = styled.div`
 
 const CenterText = styled.div`
     text-align: center;
+    height: 22px;
 `
 const Results = styled.div`
     display: flex;
@@ -79,10 +80,30 @@ const ResultsRow = styled.tr`
 const ResultsData = styled.td`
     border-collapse: collapse;
 `
-
 const CenterFlex = styled.div`
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
+`
+const MainContainer = styled.div`
+    position: relative;
+    width: max-content;
+    margin: auto;
+    scale: 75%;
+    margin-top: -100px;
+    margin-bottom: -100px;
+`
+const ModalRow = styled.div`
+    display: flex;
+    margin-left: 8px;
+`
+const ChampionInfo = styled.div`
+    position: absolute;
+    user-select: none;
+`
+const ModalButtonImage = styled.div`
+    margin-left: 3px;
+    position: relative;
+    cursor: pointer;
 `
 
 interface Props {
@@ -95,11 +116,6 @@ interface Props {
 
 const CompBuilder = ({ championWinRates, pickedChamps, setPickedChamps }: Props) => {
     const data = useContext(Context)
-
-    interface winLoss {
-        wins: number,
-        losses: number
-    }
 
     const defaultObject = { championPosition: '', matchupData: null }
 
@@ -467,7 +483,7 @@ const CompBuilder = ({ championWinRates, pickedChamps, setPickedChamps }: Props)
             if (group.length === 4) {
                 group = []
             }
-            group.push(<div key={index} style={{ marginLeft: "3px", position: "relative" }} onClick={() => {
+            group.push(<ModalButtonImage key={index} onClick={() => {
                 if (currentCustomChamp.redOrBlue === 'red') {
                     redCustomChamps[currentCustomChamp.index] = md.id
                     setRedCustomChamps([...redCustomChamps])
@@ -478,16 +494,16 @@ const CompBuilder = ({ championWinRates, pickedChamps, setPickedChamps }: Props)
                 }
                 setShowConfusedModal(false)
             }}>
-                <img src={data.championToImage.get(md.id).src} style={{ cursor: "pointer" }} />
-                <div style={{ position: "absolute", zIndex: "100", bottom: "5px", color: getColorForPercentage(md.winPercent), userSelect: "none", backgroundColor: "black" }} key={index}>{(md.winPercent * 100).toFixed(2) + "%"}</div>
-                <div style={{ position: "absolute", userSelect: "none", zIndex: "100", top: "0px", backgroundColor: "rgba(125, 125, 125, 0.5)" }}>{data.champData.find((data) => data.value === md.id)?.label}</div>
-            </div>)
+                <img src={data.championToImage.get(md.id).src} />
+                <ChampionInfo style={{ bottom: "5px", color: getColorForPercentage(md.winPercent), backgroundColor: "black" }} key={index}>{(md.winPercent * 100).toFixed(2) + "%"}</ChampionInfo>
+                <ChampionInfo style={{ top: "0px", backgroundColor: "rgba(125, 125, 125, 0.5)" }}>{data.champData.find((data) => data.value === md.id)?.label}</ChampionInfo>
+            </ModalButtonImage>)
             if (group.length === 4 || index === modalData.length - 1) {
-                return <div style={{ display: "flex", marginLeft: "8px" }} key={index}>
+                return <ModalRow key={index}>
                     {group.map((data, index) => {
                         return <div key={index}>{data}</div>
                     })}
-                </div>
+                </ModalRow>
             }
         })
     }, [modalData])
@@ -561,8 +577,7 @@ const CompBuilder = ({ championWinRates, pickedChamps, setPickedChamps }: Props)
         }
     }
 
-    return (< div style={{ position: "relative", width: "max-content", margin: "auto", scale: "75%", marginTop: "-100px", marginBottom: "-100px" }
-    } id="compbuilder" >
+    return (< MainContainer id="compbuilder" >
         <Modal isOpen={showConfusedModal} onClose={() => setShowConfusedModal(false)} title={recommendedChampionsTitle}>
             {modalJsx as any}
         </Modal>
@@ -579,7 +594,7 @@ const CompBuilder = ({ championWinRates, pickedChamps, setPickedChamps }: Props)
                         <RedHeader>
                             Combined Results
                         </RedHeader>
-                        <CenterText style={{ color: getColorForPercentage((redSynergyAverage + redMatchupAverage) / 200), height: "22px" }}>
+                        <CenterText style={{ color: getColorForPercentage((redSynergyAverage + redMatchupAverage) / 200) }}>
                             {!isNaN(redSynergyAverage) && !isNaN(redMatchupAverage) ? ((redSynergyAverage + redMatchupAverage) / 2).toFixed(2) + "%" : ''}
                         </CenterText>
                     </ResultsView>
@@ -593,7 +608,7 @@ const CompBuilder = ({ championWinRates, pickedChamps, setPickedChamps }: Props)
                         <RedHeader>
                             Average Synergy
                         </RedHeader>
-                        <CenterText style={{ color: getColorForPercentage(redSynergyAverage / 100), height: "22px", marginBottom: "-6px" }}>
+                        <CenterText style={{ color: getColorForPercentage(redSynergyAverage / 100), marginBottom: "-6px" }}>
                             {isNaN(redSynergyAverage) ? '' : redSynergyAverage.toFixed(2) + "%"}
                         </CenterText>
                     </ResultsView>
@@ -607,7 +622,7 @@ const CompBuilder = ({ championWinRates, pickedChamps, setPickedChamps }: Props)
                         <RedHeader>
                             Average Matchup
                         </RedHeader>
-                        <CenterText style={{ color: getColorForPercentage(redMatchupAverage / 100), height: "22px", marginBottom: "-6px" }}>
+                        <CenterText style={{ color: getColorForPercentage(redMatchupAverage / 100), marginBottom: "-6px" }}>
                             {isNaN(redMatchupAverage) ? '' : redMatchupAverage.toFixed(2) + "%"}
                         </CenterText>
                     </ResultsView>
@@ -621,7 +636,7 @@ const CompBuilder = ({ championWinRates, pickedChamps, setPickedChamps }: Props)
                         <BlueHeader>
                             Average Matchup
                         </BlueHeader>
-                        <CenterText style={{ color: getColorForPercentage(blueMatchupAverage / 100), height: "22px", marginBottom: "-6px" }}>
+                        <CenterText style={{ color: getColorForPercentage(blueMatchupAverage / 100), marginBottom: "-6px" }}>
                             {isNaN(blueMatchupAverage) ? '' : blueMatchupAverage.toFixed(2) + "%"}
                         </CenterText>
                     </ResultsView>
@@ -635,7 +650,7 @@ const CompBuilder = ({ championWinRates, pickedChamps, setPickedChamps }: Props)
                         <BlueHeader>
                             Average Synergy
                         </BlueHeader>
-                        <CenterText style={{ color: getColorForPercentage(blueSynergyAverage / 100), height: "22px", marginBottom: "-6px" }}>
+                        <CenterText style={{ color: getColorForPercentage(blueSynergyAverage / 100), marginBottom: "-6px" }}>
                             {isNaN(blueSynergyAverage) ? '' : blueSynergyAverage.toFixed(2) + "%"}
                         </CenterText>
                     </ResultsView>
@@ -653,14 +668,14 @@ const CompBuilder = ({ championWinRates, pickedChamps, setPickedChamps }: Props)
                         <BlueHeader>
                             Combined Results
                         </BlueHeader>
-                        <CenterText style={{ color: getColorForPercentage((blueSynergyAverage + blueMatchupAverage) / 200), height: "22px" }}>
+                        <CenterText style={{ color: getColorForPercentage((blueSynergyAverage + blueMatchupAverage) / 200) }}>
                             {!isNaN(blueSynergyAverage) && !isNaN(blueMatchupAverage) ? ((blueSynergyAverage + blueMatchupAverage) / 2).toFixed(2) + "%" : ''}
                         </CenterText>
                     </ResultsView>
                 </Results>
             </Column>
         </Container>
-    </div >)
+    </MainContainer >)
 }
 
 export default CompBuilder
