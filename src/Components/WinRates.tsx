@@ -41,6 +41,12 @@ const MarginLeftRight = styled.div`
     margin-left: 10px;
     margin-right: 10px;
 `
+const CenteredMessage = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 100px;
+`
 
 const positions = [{ value: 'All Positions', label: 'ALL POSITIONS' }, { value: 'Top', label: 'TOP' }, { value: 'Jungle', label: 'JUNGLE' }, { value: 'Mid', label: 'MID' }, { value: 'ADC', label: 'ADC' }, { value: 'Support', label: 'SUPPORT' },]
 const sorting = [{ value: 'WIN RATE', label: 'WIN RATE' }, { value: 'PLAY RATE', label: 'PLAY RATE' }]
@@ -69,6 +75,7 @@ const WinRates = ({ championWinRates }: Props) => {
     const [selectedCompareModalPosition, setSelectedCompareModalPosition] = useState(positions[0])
     const [selectedOpponentOrTeam, setSelectedOpponentOrTeam] = useState(opponentOrTeam[0])
     const [champData, setChampData] = useState(null)
+    const [isLoading, setIsLoading] = useState(false)
 
     const getColorForGames = (games: number) => {
         if (games < 500) {
@@ -117,25 +124,28 @@ const WinRates = ({ championWinRates }: Props) => {
         setSelectedModalPosition(selectedPosition)
         setSelectedOpponentOrTeam(opponentOrTeam[0])
         setSelectedCompareModalPosition(selectedPosition)
+        setIsLoading(true)
         if (selectedPosition.label === 'ALL POSITIONS') {
             setChampData(await getChampData(selection?.value!))
         }
         else {
             setChampData(await getData(`${selectedPosition.label}_${selection?.value!}`))
         }
+        setIsLoading(false)
     }
 
     useMemo(async () => {
-        //debugger
         if (!showDataModal) {
             return
         }
+        setIsLoading(true)
         if (selectedModalPosition.label === 'ALL POSITIONS') {
             setChampData(await getChampData(selectedChampion!.value!))
         }
         else {
             setChampData(await getData(`${selectedModalPosition.label}_${selectedChampion!.value!}`))
         }
+        setIsLoading(false)
     }, [selectedModalPosition.label, selectedChampion])
 
     const modalJsx = useMemo(() => {
@@ -208,6 +218,9 @@ const WinRates = ({ championWinRates }: Props) => {
                 row = []
             }
         })
+        if(rows.length === 0){
+            return <CenteredMessage>No Data</CenteredMessage>
+        }
         return rows.map((r, index) => {
             return <div key={index} style={{ display: 'flex' }}>{r}</div>
         })
@@ -246,6 +259,9 @@ const WinRates = ({ championWinRates }: Props) => {
                 row = []
             }
         })
+        if(rows.length === 0){
+            return <CenteredMessage>No Data</CenteredMessage>
+        }
         return rows.map((r, index) => {
             return <div key={index} style={{ display: 'flex' }}>{r}</div>
         })
@@ -276,7 +292,7 @@ const WinRates = ({ championWinRates }: Props) => {
                     <Input width='60px' setValue={setGamesGreaterModal} value={gamesGreaterModal} defaultValue={0} type='number' maxLength={8}/>
                 </div>
             </div>}>
-                {modalJsx}
+                {isLoading ? <CenteredMessage>Loading...</CenteredMessage> : modalJsx}
             </Modal>
             <div style={{ display: 'flex', marginBottom: '10px' }}>
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '3px', marginRight: '10px', fontSize: 'large' }}>Position</div>
