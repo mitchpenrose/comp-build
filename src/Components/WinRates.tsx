@@ -47,6 +47,53 @@ const CenteredMessage = styled.div`
     align-items: center;
     margin: 100px;
 `
+const InputDescription = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 20px;
+    margin-right: 10px;
+    font-size: large;
+`
+const InputSection = styled.div`
+    display: flex;
+    margin-bottom: 10px;
+`
+const AdBlock = styled.div`
+    min-width: 195px;
+`
+const MainContainer = styled.div`
+    width: 1110px;
+    margin: auto;
+    padding: 50px;
+`
+const ModalInputModifiers = styled.div`
+    display: flex;
+    margin-top: 20px;
+    margin-bottom: 10px;
+`
+const ModalTitleInputModifiers = styled.div`
+    display: flex;
+    justify-content: center;
+`
+const TitleStyle = styled.div`
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: larger;
+`
+const Flex = styled.div`
+    display: flex;
+`
+const RowStyle = styled.div`
+    margin-left: 3px;
+    position: relative;
+    cursor: pointer;
+`
+const ChampionInfo = styled.div`
+    position: absolute;
+    user-select: none;
+    background-color: black;
+`
 
 const positions = [{ value: 'All Positions', label: 'ALL POSITIONS' }, { value: 'Top', label: 'TOP' }, { value: 'Jungle', label: 'JUNGLE' }, { value: 'Mid', label: 'MID' }, { value: 'ADC', label: 'ADC' }, { value: 'Support', label: 'SUPPORT' },]
 const sorting = [{ value: 'WIN RATE', label: 'WIN RATE' }, { value: 'PLAY RATE', label: 'PLAY RATE' }]
@@ -184,10 +231,10 @@ const WinRates = ({ championWinRates }: Props) => {
         championToData.forEach((value, key) => {
             champStats.push({ key: key, wins: value.wins, losses: value.losses, pct: value.wins / (value.wins + value.losses) })
         })
-        if(selectedModalSort.value === 'WIN RATE'){
+        if (selectedModalSort.value === 'WIN RATE') {
             champStats.sort((a, b) => { return b.pct - a.pct })
         }
-        else if(selectedModalSort.value === 'PLAY RATE'){
+        else if (selectedModalSort.value === 'PLAY RATE') {
             champStats.sort((a, b) => { return (b.wins + b.losses) - (a.wins + a.losses) })
         }
 
@@ -200,29 +247,29 @@ const WinRates = ({ championWinRates }: Props) => {
             })
         }
         filtered = filtered.filter((f) => f.wins + f.losses > gamesGreaterModal)
-        
+
 
         let row: JSX.Element[] = []
         let rows: JSX.Element[][] = []
         const length = filtered.length
         filtered.forEach((champStats: ChampStat, index: number) => {
             const name = data.champData.find((data) => data.value === champStats.key)?.label
-            row.push(<div style={{ marginLeft: '3px', position: 'relative', cursor: 'pointer' }} key={index} onClick={() => clickChampion(name!)}>
+            row.push(<RowStyle key={index} onClick={() => clickChampion(name!)}>
                 <img src={data.championToImage.get(champStats.key).src} />
-                <div style={{ position: "absolute", top: "0px", userSelect: "none", backgroundColor: "rgba(125, 125, 125, 0.5)" }}>{name}</div>
-                <div style={{ position: "absolute", bottom: "25px", color: getColorForPercentage(champStats.pct), userSelect: "none", backgroundColor: "black" }} key={index}>{(champStats.pct * 100).toFixed(2) + "%"}</div>
-                <div style={{ position: "absolute", bottom: "5px", color: getColorForGames(champStats.wins + champStats.losses), userSelect: "none", backgroundColor: "black" }} key={(index + 1) * 2}>{`${champStats.wins}/${champStats.wins + champStats.losses}`}</div>
-            </div>)
+                <ChampionInfo style={{top: "0px", backgroundColor: "rgba(125, 125, 125, 0.5)" }}>{name}</ChampionInfo>
+                <ChampionInfo style={{bottom: "25px", color: getColorForPercentage(champStats.pct) }} key={index}>{(champStats.pct * 100).toFixed(2) + "%"}</ChampionInfo>
+                <ChampionInfo style={{bottom: "5px", color: getColorForGames(champStats.wins + champStats.losses) }} key={(index + 1) * 2}>{`${champStats.wins}/${champStats.wins + champStats.losses}`}</ChampionInfo>
+            </RowStyle>)
             if (row.length === 9 || index === length - 1) {
                 rows.push(row)
                 row = []
             }
         })
-        if(rows.length === 0){
+        if (rows.length === 0) {
             return <CenteredMessage>No Data</CenteredMessage>
         }
         return rows.map((r, index) => {
-            return <div key={index} style={{ display: 'flex' }}>{r}</div>
+            return <Flex key={index} >{r}</Flex>
         })
     }, [champData, selectedOpponentOrTeam.label, selectedCompareModalPosition.label, selectedModalSort.label, filterModalValue, gamesGreaterModal])
 
@@ -248,22 +295,22 @@ const WinRates = ({ championWinRates }: Props) => {
         const length = filtered.length
         filtered.forEach((champStats: ChampStat, index: number) => {
             const name = data.champData.find((data) => data.value === champStats.key)?.label
-            row.push(<div style={{ marginLeft: '3px', position: 'relative', cursor: 'pointer' }} key={index} onClick={() => clickChampion(name!)}>
+            row.push(<RowStyle key={index} onClick={() => clickChampion(name!)}>
                 <img src={data.championToImage.get(champStats.key).src} />
-                <div style={{ position: "absolute", top: "0px", userSelect: "none", backgroundColor: "rgba(125, 125, 125, 0.5)" }}>{name}</div>
-                <div style={{ position: "absolute", bottom: "25px", color: getColorForPercentage(champStats.pct), userSelect: "none", backgroundColor: "black" }} key={index}>{(champStats.pct * 100).toFixed(2) + "%"}</div>
-                <div style={{ position: "absolute", bottom: "5px", color: getColorForGames(champStats.wins + champStats.losses), userSelect: "none", backgroundColor: "black" }} key={(index + 1) * 2}>{`${champStats.wins}/${champStats.wins + champStats.losses}`}</div>
-            </div>)
+                <ChampionInfo style={{ top: "0px", backgroundColor: "rgba(125, 125, 125, 0.5)" }}>{name}</ChampionInfo>
+                <ChampionInfo style={{ bottom: "25px", color: getColorForPercentage(champStats.pct) }} key={index}>{(champStats.pct * 100).toFixed(2) + "%"}</ChampionInfo>
+                <ChampionInfo style={{ bottom: "5px", color: getColorForGames(champStats.wins + champStats.losses) }} key={(index + 1) * 2}>{`${champStats.wins}/${champStats.wins + champStats.losses}`}</ChampionInfo>
+            </RowStyle>)
             if (row.length === 9 || index === length - 1) {
                 rows.push(row)
                 row = []
             }
         })
-        if(rows.length === 0){
+        if (rows.length === 0) {
             return <CenteredMessage>No Data</CenteredMessage>
         }
         return rows.map((r, index) => {
-            return <div key={index} style={{ display: 'flex' }}>{r}</div>
+            return <Flex key={index}>{r}</Flex>
         })
     }, [currentChampStats, selectedSort, filterValue, gamesGreater])
 
@@ -273,41 +320,43 @@ const WinRates = ({ championWinRates }: Props) => {
         setFilterModalValue('')
     }
 
-    return <div style={{ display: 'flex' }}>
-        <div style={{ minWidth: '195px' }} />
-        <div style={{ width: '1110px', margin: 'auto', padding: '50px' }}>
-            <Modal width={"1110px"} isOpen={showDataModal} onClose={closeModal} titleStyle={{}} title={<div><div style={{ textAlign: "center", marginBottom: "15px", fontSize: "larger" }}>{`${selectedChampion?.label} In ${selectedModalPosition.value} ${selectedOpponentOrTeam.value} Champions In ${selectedCompareModalPosition.value}`}</div>
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <MarginLeftRight><StyledSelect options={data.champData} onChange={(selected) => { setSelectedChampion(selected as ChampionSelection) }} value={selectedChampion} /></MarginLeftRight>
-                    <MarginLeftRight><StyledSelect options={positions} onChange={(selected) => setSelectedModalPosition(selected as { value: string, label: string })} value={selectedModalPosition} /></MarginLeftRight>
-                    <MarginLeftRight><StyledSelect options={opponentOrTeam} onChange={(selected) => setSelectedOpponentOrTeam(selected as { value: string, label: string })} value={selectedOpponentOrTeam} /></MarginLeftRight>
-                    <MarginLeftRight><StyledSelect options={positions} onChange={(selected) => setSelectedCompareModalPosition(selected as { value: string, label: string })} value={selectedCompareModalPosition} /></MarginLeftRight>
-                </div>
-                <div style={{display: 'flex', marginTop: '20px', marginBottom: '10px'}}>
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '20px', marginRight: '10px', fontSize: 'large' }}>Sort By</div>
-                    <StyledSelect options={sorting} onChange={(selected) => { setSelectedModalSort(selected as { value: string, label: string }) }} value={selectedModalSort} />
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '20px', marginRight: '10px', fontSize: 'large' }}>Search</div>
-                    <Input setValue={setFilterModalValue} value={filterModalValue}/>
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '20px', marginRight: '10px', fontSize: 'large' }}>{`Number of Games >`}</div>
-                    <Input width='60px' setValue={setGamesGreaterModal} value={gamesGreaterModal} defaultValue={0} type='number' maxLength={8}/>
-                </div>
-            </div>}>
+    return <Flex>
+        <AdBlock />
+        <MainContainer>
+            <Modal width={"1110px"} isOpen={showDataModal} onClose={closeModal} titleStyle={{}} title={
+                <div>
+                    <TitleStyle>{`${selectedChampion?.label} In ${selectedModalPosition.value} ${selectedOpponentOrTeam.value} Champions In ${selectedCompareModalPosition.value}`}</TitleStyle>
+                    <ModalTitleInputModifiers>
+                        <MarginLeftRight><StyledSelect options={data.champData} onChange={(selected) => { setSelectedChampion(selected as ChampionSelection) }} value={selectedChampion} /></MarginLeftRight>
+                        <MarginLeftRight><StyledSelect options={positions} onChange={(selected) => setSelectedModalPosition(selected as { value: string, label: string })} value={selectedModalPosition} /></MarginLeftRight>
+                        <MarginLeftRight><StyledSelect options={opponentOrTeam} onChange={(selected) => setSelectedOpponentOrTeam(selected as { value: string, label: string })} value={selectedOpponentOrTeam} /></MarginLeftRight>
+                        <MarginLeftRight><StyledSelect options={positions} onChange={(selected) => setSelectedCompareModalPosition(selected as { value: string, label: string })} value={selectedCompareModalPosition} /></MarginLeftRight>
+                    </ModalTitleInputModifiers>
+                    <ModalInputModifiers>
+                        <InputDescription>Sort By</InputDescription>
+                        <StyledSelect options={sorting} onChange={(selected) => { setSelectedModalSort(selected as { value: string, label: string }) }} value={selectedModalSort} />
+                        <InputDescription>Search</InputDescription>
+                        <Input setValue={setFilterModalValue} value={filterModalValue} />
+                        <InputDescription>{`Number of Games >`}</InputDescription>
+                        <Input width='60px' setValue={setGamesGreaterModal} value={gamesGreaterModal} defaultValue={0} type='number' maxLength={8} />
+                    </ModalInputModifiers>
+                </div>}>
                 {isLoading ? <CenteredMessage>Loading...</CenteredMessage> : modalJsx}
             </Modal>
-            <div style={{ display: 'flex', marginBottom: '10px' }}>
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '3px', marginRight: '10px', fontSize: 'large' }}>Position</div>
+            <InputSection>
+                <InputDescription style={{ marginLeft: '3px' }}>Position</InputDescription>
                 <StyledSelect options={positions} onChange={(selected) => { setSelectedPosition(selected as { value: string, label: string }); setSelectedModalPosition(selected as { value: string, label: string }) }} value={selectedPosition} />
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '20px', marginRight: '10px', fontSize: 'large' }}>Sort By</div>
+                <InputDescription>Sort By</InputDescription>
                 <StyledSelect options={sorting} onChange={(selected) => { setSelectedSort(selected as { value: string, label: string }) }} value={selectedSort} />
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '20px', marginRight: '10px', fontSize: 'large' }}>Search</div>
-                <Input setValue={setFilterValue} value={filterValue}/>
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '20px', marginRight: '10px', fontSize: 'large' }}>{`Number of Games >`}</div>
-                <Input width='60px' setValue={setGamesGreater} value={gamesGreater} defaultValue={0} type='number' maxLength={8}/>
-            </div>
+                <InputDescription>Search</InputDescription>
+                <Input setValue={setFilterValue} value={filterValue} />
+                <InputDescription>{`Number of Games >`}</InputDescription>
+                <Input width='60px' setValue={setGamesGreater} value={gamesGreater} defaultValue={0} type='number' maxLength={8} />
+            </InputSection>
             {sortedFilteredData}
-        </div>
-        <div style={{ minWidth: '195px' }} />
-    </div>
+        </MainContainer>
+        <AdBlock />
+    </Flex>
 }
 
 export default WinRates
