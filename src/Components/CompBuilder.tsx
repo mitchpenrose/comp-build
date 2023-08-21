@@ -88,7 +88,7 @@ const MainContainer = styled.div`
     position: relative;
     width: max-content;
     margin: auto;
-    scale: 75%;
+    transform: scale(0.75);
     margin-top: -100px;
     margin-bottom: -100px;
 `
