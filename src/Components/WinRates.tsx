@@ -181,19 +181,16 @@ const WinRates = ({ championWinRates }: Props) => {
         setIsLoading(false)
     }
 
-    useMemo(async () => {
-        if (!showDataModal) {
-            return
-        }
+    const updateData = async (smp: string, sc: string) => {
         setIsLoading(true)
-        if (selectedModalPosition.label === 'ALL POSITIONS') {
-            setChampData(await getChampData(selectedChampion!.value!))
+        if (smp === 'ALL POSITIONS') {
+            setChampData(await getChampData(sc))
         }
         else {
-            setChampData(await getData(`${selectedModalPosition.label}_${selectedChampion!.value!}`))
+            setChampData(await getData(`${smp}_${sc}`))
         }
         setIsLoading(false)
-    }, [selectedModalPosition.label, selectedChampion])
+    }
 
     const modalJsx = useMemo(() => {
         if (!champData) {
@@ -327,8 +324,8 @@ const WinRates = ({ championWinRates }: Props) => {
                 <div>
                     <TitleStyle>{`${selectedChampion?.label} In ${selectedModalPosition.value} ${selectedOpponentOrTeam.value} Champions In ${selectedCompareModalPosition.value}`}</TitleStyle>
                     <ModalTitleInputModifiers>
-                        <MarginLeftRight><StyledSelect options={data.champData} onChange={(selected) => { setSelectedChampion(selected as ChampionSelection) }} value={selectedChampion} /></MarginLeftRight>
-                        <MarginLeftRight><StyledSelect options={positions} onChange={(selected) => setSelectedModalPosition(selected as { value: string, label: string })} value={selectedModalPosition} /></MarginLeftRight>
+                        <MarginLeftRight><StyledSelect options={data.champData} onChange={(selected) => { setSelectedChampion(selected as ChampionSelection); updateData(selectedModalPosition.label, (selected as ChampionSelection).value)  }} value={selectedChampion} /></MarginLeftRight>
+                        <MarginLeftRight><StyledSelect options={positions} onChange={(selected) => {setSelectedModalPosition(selected as { value: string, label: string }); updateData((selected  as { value: string, label: string }).label, selectedChampion!.value!)}} value={selectedModalPosition} /></MarginLeftRight>
                         <MarginLeftRight><StyledSelect options={opponentOrTeam} onChange={(selected) => setSelectedOpponentOrTeam(selected as { value: string, label: string })} value={selectedOpponentOrTeam} /></MarginLeftRight>
                         <MarginLeftRight><StyledSelect options={positions} onChange={(selected) => setSelectedCompareModalPosition(selected as { value: string, label: string })} value={selectedCompareModalPosition} /></MarginLeftRight>
                     </ModalTitleInputModifiers>
@@ -345,7 +342,7 @@ const WinRates = ({ championWinRates }: Props) => {
             </Modal>
             <InputSection>
                 <InputDescription style={{ marginLeft: '3px' }}>Position</InputDescription>
-                <StyledSelect options={positions} onChange={(selected) => { setSelectedPosition(selected as { value: string, label: string }); setSelectedModalPosition(selected as { value: string, label: string }) }} value={selectedPosition} />
+                <StyledSelect options={positions} onChange={(selected) => { setSelectedPosition(selected as { value: string, label: string })}} value={selectedPosition} />
                 <InputDescription>Sort By</InputDescription>
                 <StyledSelect options={sorting} onChange={(selected) => { setSelectedSort(selected as { value: string, label: string }) }} value={selectedSort} />
                 <InputDescription>Search</InputDescription>
