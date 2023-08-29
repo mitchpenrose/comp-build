@@ -68,7 +68,7 @@ function App() {
   const [loading, setLoading] = useState<Promise<void>[]>([new Promise(() => { }), new Promise(() => { }), new Promise(() => { })])
   const [currentlyLoading, setCurrentlyLoading] = useState(true)
 
-  const patch = '13.14.1'
+  const patch = '13.16.1'
 
   useEffect(() => {
     GA4.initialize("G-BPQ188CVYS")
